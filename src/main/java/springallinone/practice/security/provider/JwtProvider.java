@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import springallinone.practice.jpa.constant.Role;
 import springallinone.practice.security.customuser.CustomUserDetails;
 import springallinone.practice.security.properties.JwtProperties;
 
@@ -28,7 +29,7 @@ public class JwtProvider {
 //        this.userDetailsService = userDetailsService;
     }
 
-    public String createToken(Long id, String email, String role) {
+    public String createToken(Long id, String email, Role role) {
         Date now = new Date();
         return Jwts.builder()
                 .subject(String.valueOf(id))
@@ -54,7 +55,7 @@ public class JwtProvider {
         Claims claims = extractClaims(token);
         Long id = Long.parseLong(claims.getSubject());
         String email = claims.get("email", String.class);
-        String role = claims.get("role", String.class);
+        Role role = claims.get("role", Role.class);
 
 //        String username = extractUsername(token);
 //        UserDetails userDetails = userDetailsService.loadByUsername(username);

@@ -5,6 +5,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import springallinone.practice.jpa.constant.Role;
 
 
 import java.util.Collection;
@@ -19,9 +20,9 @@ public class CustomUserDetails implements UserDetails {
     private final String password;
 
     @Getter
-    private final String role;
+    private final Role role;
 
-    public CustomUserDetails(Long id, String email, String password, String role) {
+    public CustomUserDetails(Long id, String email, String password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -32,7 +33,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (role == null) return List.of();
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

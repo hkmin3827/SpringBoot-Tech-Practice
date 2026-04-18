@@ -2,6 +2,7 @@ package springallinone.practice.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import springallinone.practice.jpa.constant.Role;
 
 @Entity
 @Table(name = "members")
@@ -37,9 +38,5 @@ public class Member extends BaseEntity {
 
     public void updateName(String name) {
         this.name = name;
-    }
-
-    public enum Role {
-        ROLE_USER, ROLE_ADMIN
     }
 }
