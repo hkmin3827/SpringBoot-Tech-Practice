@@ -20,6 +20,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String uri = request.getRequestURI();
+
+        return uri.equals("/api/auth/login") || uri.equals("/api/auth/signup");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

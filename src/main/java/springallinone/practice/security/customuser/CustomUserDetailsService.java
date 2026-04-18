@@ -1,4 +1,4 @@
-package springallinone.practice.security.service;
+package springallinone.practice.security.customuser;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +11,8 @@ import springallinone.practice.jpa.entity.Member;
 import springallinone.practice.jpa.repository.MemberRepository;
 
 import java.util.List;
+
+// DB 조회형
 
 @Service
 @RequiredArgsConstructor
@@ -29,4 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(List.of(new SimpleGrantedAuthority(member.getRole().name())))
                 .build();
     }
+
+
 }
