@@ -25,19 +25,12 @@ public class Product extends BaseEntity {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private int stockQuantity;
+    private int quantity;
 
     @Builder
-    public Product(String name, BigDecimal price, int stockQuantity) {
+    public Product(String name, BigDecimal price, int quantity) {
         this.name = name;
         this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
-
-    public void decreaseStock(int quantity) {
-        if (this.stockQuantity < quantity) {
-            throw new IllegalStateException("Insufficient stock");
-        }
-        this.stockQuantity -= quantity;
+        this.quantity = quantity;
     }
 }

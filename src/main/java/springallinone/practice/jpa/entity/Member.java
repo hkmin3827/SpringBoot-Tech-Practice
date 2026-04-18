@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.role = role;
+        this.role = role != null ? role : Role.ROLE_USER;
     }
 
     public void updateName(String name) {
