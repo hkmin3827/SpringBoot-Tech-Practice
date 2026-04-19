@@ -17,6 +17,22 @@ repositories {
 	mavenCentral()
 }
 
+
+def queryDslVersion = "7.1"
+def querydslSrcDir  = layout.buildDirectory.dir("generated/querydsl").get().asFile // build/generated/querydsl
+
+sourceSets {
+	main {
+		java {
+			srcDirs += querydslSrcDir
+		}
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.getGeneratedSourceOutputDirectory().set(file(querydslSrcDir))
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-h2console'
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
@@ -44,6 +60,12 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+	// querydsl
+	implementation("io.github.openfeign.querydsl:querydsl-jpa:${queryDslVersion}")
+	annotationProcessor("io.github.openfeign.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 }
 
 tasks.named('test') {
