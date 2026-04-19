@@ -15,19 +15,19 @@ public class OptimisticLockStockService {
     private final StockRepository stockRepository;
 
     @Transactional
-    public void decrease(Long stockId, Long amount) {
+    public void decrease(Long stockId, Long quantity) {
         Stock stock = stockRepository.findByIdWithOptimisticLock(stockId)
                 .orElseThrow(() -> new IllegalArgumentException("Stock with id " + stockId + " not found"));
-        stock.decrease(amount);
+        stock.decrease(quantity);
     }
 
 
-    public void decreaseWithRetry(Long stockId, Long amount) throws InterruptedException {
+    public void decreaseWithRetry(Long stockId, Long quantity) throws InterruptedException {
         int maxRetry = 3;
         int count = 0;
         while (count < maxRetry) {
             try {
-                decrease(stockId, amount);
+                decrease(stockId, quantity);
                 return;
             } catch (ObjectOptimisticLockingFailureException e) {
                 count++;
