@@ -1,21 +1,23 @@
-package springallinone.practice.cache.service;
+package springallinone.practice.caffeineCache.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springallinone.practice.cache.dto.ProductResponse;
 import springallinone.practice.jpa.entity.Product;
 import springallinone.practice.jpa.repository.ProductRepository;
+import springallinone.practice.redisCache.dto.ProductResponse;
 
 import java.util.List;
 
 @Service
+@Profile("caffeine")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ProductCacheService {
+public class CaffeineCacheService {
 
     private final ProductRepository productRepository;
 
@@ -23,7 +25,7 @@ public class ProductCacheService {
     public ProductResponse getById(Long id) {
         return productRepository.findById(id)
                 .map(ProductResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
     }
 
     @Cacheable(value = "products", key = "'all'")
@@ -31,13 +33,6 @@ public class ProductCacheService {
         return productRepository.findAll()
                 .stream().map(ProductResponse::from)
                 .toList();
-    }
-
-    @Cacheable(value = "products", key = "#id", condition = "#id > 99")
-    public ProductResponse cacheIfIdAfterHundred(Long id) {
-        return productRepository.findById(id)
-                .map(ProductResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
     }
 
     @CachePut(value = "products", key = "#result.id")
@@ -54,5 +49,5 @@ public class ProductCacheService {
     }
 
     @CacheEvict(value = "products", allEntries = true)
-    public void clearAll() {}
+    public void evictAll() {}
 }

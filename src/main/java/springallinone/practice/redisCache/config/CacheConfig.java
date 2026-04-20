@@ -1,4 +1,4 @@
-package springallinone.practice.cache.config;
+package springallinone.practice.redisCache.config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;

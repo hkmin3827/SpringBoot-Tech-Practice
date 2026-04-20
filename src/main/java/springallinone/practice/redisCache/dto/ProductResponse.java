@@ -1,4 +1,4 @@
-package springallinone.practice.cache.dto;
+package springallinone.practice.redisCache.dto;
 
 import springallinone.practice.jpa.entity.Product;
 
