@@ -33,6 +33,13 @@ public class ProductCacheService {
                 .toList();
     }
 
+    @Cacheable(value = "products", key = "#id", condition = "#id > 99")
+    public ProductResponse cacheIfIdAfterHundred(Long id) {
+        return productRepository.findById(id)
+                .map(ProductResponse::from)
+                .orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
+    }
+
     @CachePut(value = "products", key = "#result.id")
     @Transactional
     public ProductResponse save(Product product) {
