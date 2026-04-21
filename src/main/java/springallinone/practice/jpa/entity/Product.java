@@ -33,4 +33,11 @@ public class Product extends BaseEntity {
         this.price = price;
         this.quantity = quantity;
     }
+
+    public void decreaseStock(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalStateException("Quantity exceeds stock");
+        }
+        this.quantity -= quantity;
+    }
 }
