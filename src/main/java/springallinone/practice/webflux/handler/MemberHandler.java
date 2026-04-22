@@ -1,32 +1,28 @@
 package springallinone.practice.webflux.handler;
 
-import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import springallinone.practice.jpa.repository.MemberRepository;
+import springallinone.practice.webflux.service.MemberReactiveService;
 
-@CommandNaming
+@Component
 @RequiredArgsConstructor
 public class MemberHandler {
 
-    private final MemberRepository  memberRepository;
+    private final MemberReactiveService memberReactiveService;
 
     public Mono<ServerResponse> findAll(ServerRequest request) {
-        return Flux.defer(() -> Flux.fromIterable(memberRepository.findAll()))
-                .subscribeOn(Schedulers.boundedElastic())
+        return memberReactiveService.findAll()
                 .collectList()
                 .flatMap(members -> ServerResponse.ok().bodyValue(members));
     }
 
     public Mono<ServerResponse> findById(ServerRequest request) {
         Long id = Long.parseLong(request.pathVariable("id"));
-        return Mono.defer(() -> Mono.justOrEmpty(memberRepository.findById(id)))
-                .subscribeOn(Schedulers.boundedElastic())
+        return memberReactiveService.findById(id)
                 .flatMap(member -> ServerResponse.ok().bodyValue(member))
-                .switchIfEmpty(ServerResponse.notFound().build());
+                .onErrorResume(IllegalArgumentException.class, e -> ServerResponse.notFound().build());
     }
 }
